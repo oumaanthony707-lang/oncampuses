@@ -58,8 +58,9 @@ function MarketplacePage() {
     },
   });
 
-  const setSearch = (partial: Partial<z.infer<typeof searchSchema>>) => {
-    navigate({ search: (prev) => ({ ...prev, ...partial }) });
+  type S = z.infer<typeof searchSchema>;
+  const setSearch = (partial: Partial<S>) => {
+    navigate({ search: (prev: S) => ({ ...prev, ...partial }) });
   };
 
   return (

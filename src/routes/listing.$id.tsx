@@ -45,14 +45,18 @@ function ListingPage() {
           id,title,description,price,negotiable,images,condition,location,hostel,county,
           allow_delivery,allow_meetup,created_at,is_featured,seller_id,
           category:categories(name,slug),
-          university:universities(name,short_name),
-          seller:profiles!listings_seller_id_fkey(id,full_name,avatar_url,is_verified,rating,phone,whatsapp,university:universities(name))
+          university:universities(name,short_name)
         `)
         .eq("id", id)
         .maybeSingle();
       if (error) throw error;
       if (!data) throw notFound();
-      return data;
+      const { data: seller } = await supabase
+        .from("profiles")
+        .select("id,full_name,avatar_url,is_verified,rating,phone,whatsapp,university:universities(name)")
+        .eq("id", data.seller_id)
+        .maybeSingle();
+      return { ...data, seller };
     },
   });
 
