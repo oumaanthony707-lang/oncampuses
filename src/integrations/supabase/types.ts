@@ -14,7 +14,313 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      categories: {
+        Row: {
+          created_at: string
+          icon: string | null
+          id: string
+          name: string
+          parent_id: string | null
+          slug: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          icon?: string | null
+          id?: string
+          name: string
+          parent_id?: string | null
+          slug: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          icon?: string | null
+          id?: string
+          name?: string
+          parent_id?: string | null
+          slug?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "categories_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conversations: {
+        Row: {
+          buyer_id: string
+          created_at: string
+          id: string
+          listing_id: string | null
+          seller_id: string
+        }
+        Insert: {
+          buyer_id: string
+          created_at?: string
+          id?: string
+          listing_id?: string | null
+          seller_id: string
+        }
+        Update: {
+          buyer_id?: string
+          created_at?: string
+          id?: string
+          listing_id?: string | null
+          seller_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversations_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      favorites: {
+        Row: {
+          created_at: string
+          listing_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          listing_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          listing_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "favorites_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      listings: {
+        Row: {
+          allow_delivery: boolean
+          allow_meetup: boolean
+          category_id: string | null
+          condition: Database["public"]["Enums"]["listing_condition"]
+          county: string | null
+          created_at: string
+          description: string
+          hostel: string | null
+          id: string
+          images: string[]
+          is_featured: boolean
+          location: string | null
+          negotiable: boolean
+          price: number
+          seller_id: string
+          slug: string | null
+          status: Database["public"]["Enums"]["listing_status"]
+          title: string
+          university_id: string | null
+          updated_at: string
+          views: number
+        }
+        Insert: {
+          allow_delivery?: boolean
+          allow_meetup?: boolean
+          category_id?: string | null
+          condition?: Database["public"]["Enums"]["listing_condition"]
+          county?: string | null
+          created_at?: string
+          description: string
+          hostel?: string | null
+          id?: string
+          images?: string[]
+          is_featured?: boolean
+          location?: string | null
+          negotiable?: boolean
+          price: number
+          seller_id: string
+          slug?: string | null
+          status?: Database["public"]["Enums"]["listing_status"]
+          title: string
+          university_id?: string | null
+          updated_at?: string
+          views?: number
+        }
+        Update: {
+          allow_delivery?: boolean
+          allow_meetup?: boolean
+          category_id?: string | null
+          condition?: Database["public"]["Enums"]["listing_condition"]
+          county?: string | null
+          created_at?: string
+          description?: string
+          hostel?: string | null
+          id?: string
+          images?: string[]
+          is_featured?: boolean
+          location?: string | null
+          negotiable?: boolean
+          price?: number
+          seller_id?: string
+          slug?: string | null
+          status?: Database["public"]["Enums"]["listing_status"]
+          title?: string
+          university_id?: string | null
+          updated_at?: string
+          views?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listings_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "listings_university_id_fkey"
+            columns: ["university_id"]
+            isOneToOne: false
+            referencedRelation: "universities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          body: string
+          conversation_id: string
+          created_at: string
+          id: string
+          image_url: string | null
+          read_at: string | null
+          sender_id: string
+        }
+        Insert: {
+          body: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          read_at?: string | null
+          sender_id: string
+        }
+        Update: {
+          body?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          read_at?: string | null
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          course: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          is_verified: boolean
+          phone: string | null
+          rating: number
+          university_id: string | null
+          updated_at: string
+          username: string | null
+          whatsapp: string | null
+          year_of_study: number | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          course?: string | null
+          created_at?: string
+          full_name?: string | null
+          id: string
+          is_verified?: boolean
+          phone?: string | null
+          rating?: number
+          university_id?: string | null
+          updated_at?: string
+          username?: string | null
+          whatsapp?: string | null
+          year_of_study?: number | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          course?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          is_verified?: boolean
+          phone?: string | null
+          rating?: number
+          university_id?: string | null
+          updated_at?: string
+          username?: string | null
+          whatsapp?: string | null
+          year_of_study?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_university_id_fkey"
+            columns: ["university_id"]
+            isOneToOne: false
+            referencedRelation: "universities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      universities: {
+        Row: {
+          county: string | null
+          created_at: string
+          id: string
+          logo_url: string | null
+          name: string
+          short_name: string | null
+        }
+        Insert: {
+          county?: string | null
+          created_at?: string
+          id?: string
+          logo_url?: string | null
+          name: string
+          short_name?: string | null
+        }
+        Update: {
+          county?: string | null
+          created_at?: string
+          id?: string
+          logo_url?: string | null
+          name?: string
+          short_name?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +329,8 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      listing_condition: "new" | "like_new" | "good" | "fair" | "for_parts"
+      listing_status: "active" | "sold" | "pending" | "draft" | "removed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +457,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      listing_condition: ["new", "like_new", "good", "fair", "for_parts"],
+      listing_status: ["active", "sold", "pending", "draft", "removed"],
+    },
   },
 } as const
