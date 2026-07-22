@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SellRouteImport } from './routes/sell'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ListingIdRouteImport } from './routes/listing.$id'
@@ -23,6 +24,11 @@ const SellRoute = SellRouteImport.update({
 const MarketplaceRoute = MarketplaceRouteImport.update({
   id: '/marketplace',
   path: '/marketplace',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -44,6 +50,7 @@ const ListingIdRoute = ListingIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/dashboard': typeof DashboardRoute
   '/marketplace': typeof MarketplaceRoute
   '/sell': typeof SellRoute
   '/listing/$id': typeof ListingIdRoute
@@ -51,6 +58,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/dashboard': typeof DashboardRoute
   '/marketplace': typeof MarketplaceRoute
   '/sell': typeof SellRoute
   '/listing/$id': typeof ListingIdRoute
@@ -59,21 +67,36 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/dashboard': typeof DashboardRoute
   '/marketplace': typeof MarketplaceRoute
   '/sell': typeof SellRoute
   '/listing/$id': typeof ListingIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/marketplace' | '/sell' | '/listing/$id'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/marketplace'
+    | '/sell'
+    | '/listing/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/marketplace' | '/sell' | '/listing/$id'
-  id: '__root__' | '/' | '/auth' | '/marketplace' | '/sell' | '/listing/$id'
+  to: '/' | '/auth' | '/dashboard' | '/marketplace' | '/sell' | '/listing/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/marketplace'
+    | '/sell'
+    | '/listing/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
+  DashboardRoute: typeof DashboardRoute
   MarketplaceRoute: typeof MarketplaceRoute
   SellRoute: typeof SellRoute
   ListingIdRoute: typeof ListingIdRoute
@@ -93,6 +116,13 @@ declare module '@tanstack/react-router' {
       path: '/marketplace'
       fullPath: '/marketplace'
       preLoaderRoute: typeof MarketplaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -122,6 +152,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
+  DashboardRoute: DashboardRoute,
   MarketplaceRoute: MarketplaceRoute,
   SellRoute: SellRoute,
   ListingIdRoute: ListingIdRoute,
