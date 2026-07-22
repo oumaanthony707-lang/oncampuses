@@ -54,9 +54,11 @@ export function SiteHeader() {
           {signedIn ? (
             <>
               <Button variant="outline" size="sm" className="rounded-full" onClick={() => supabase.auth.signOut()}>Sign out</Button>
-              <Button size="sm" className="rounded-full bg-[image:var(--gradient-accent)] text-accent-foreground shadow-[var(--shadow-glow)] hover:opacity-95">
-                <Plus className="mr-1 h-4 w-4" /> Sell
-              </Button>
+              <Link to="/sell">
+                <Button size="sm" className="rounded-full bg-[image:var(--gradient-accent)] text-accent-foreground shadow-[var(--shadow-glow)] hover:opacity-95">
+                  <Plus className="mr-1 h-4 w-4" /> Sell
+                </Button>
+              </Link>
             </>
           ) : (
             <>
@@ -65,7 +67,7 @@ export function SiteHeader() {
                   <User className="mr-1 h-4 w-4" /> Sign in
                 </Button>
               </Link>
-              <Link to="/auth">
+              <Link to="/sell">
                 <Button size="sm" className="rounded-full bg-[image:var(--gradient-accent)] text-accent-foreground shadow-[var(--shadow-glow)] hover:opacity-95">
                   <Plus className="mr-1 h-4 w-4" /> Sell
                 </Button>
@@ -85,7 +87,7 @@ export function SiteHeader() {
             <Link to="/auth" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-sm font-medium hover:bg-secondary">
               {signedIn ? "Account" : "Sign in"}
             </Link>
-            <Link to="/auth" onClick={() => setOpen(false)} className="rounded-lg bg-accent px-3 py-2 text-sm font-semibold text-accent-foreground">+ Sell an item</Link>
+            <Link to="/sell" onClick={() => setOpen(false)} className="rounded-lg bg-accent px-3 py-2 text-sm font-semibold text-accent-foreground">+ Sell an item</Link>
           </div>
         </div>
       )}
