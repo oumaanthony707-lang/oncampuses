@@ -115,7 +115,7 @@ function MarketplacePage() {
           <div className="col-span-full rounded-2xl border border-dashed border-border p-12 text-center">
             <div className="text-lg font-semibold">No listings found</div>
             <p className="mt-1 text-sm text-muted-foreground">Try a different search or category.</p>
-            <Link to="/auth" className="mt-4 inline-flex rounded-full bg-accent px-5 py-2 text-sm font-semibold text-accent-foreground">Sell an item</Link>
+            <Link to="/sell" className="mt-4 inline-flex rounded-full bg-accent px-5 py-2 text-sm font-semibold text-accent-foreground">Sell an item</Link>
           </div>
         )}
         {listings.data?.map((item) => <ListingCard key={item.id} item={item} />)}
