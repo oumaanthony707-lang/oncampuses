@@ -83,10 +83,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Campus Marketplace — Kenya's #1 Student Marketplace" },
       { name: "description", content: "Buy and sell safely with fellow university students across Kenya. Laptops, books, hostel items, services and more." },
       { property: "og:title", content: "Campus Marketplace — Kenya's #1 Student Marketplace" },
-      { property: "og:description", content: "Buy and sell safely with fellow university students across Kenya." },
+      { property: "og:description", content: "Buy and sell safely with fellow university students across Kenya. Laptops, books, hostel items, services and more." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "theme-color", content: "#2f6bff" },
+      { name: "twitter:title", content: "Campus Marketplace — Kenya's #1 Student Marketplace" },
+      { name: "twitter:description", content: "Buy and sell safely with fellow university students across Kenya. Laptops, books, hostel items, services and more." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a8149598-f4a3-4d9e-8985-2ed26448b3ee/id-preview-4df79b2e--a308799a-ded1-47a2-8204-4381f048583f.lovable.app-1784801411306.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a8149598-f4a3-4d9e-8985-2ed26448b3ee/id-preview-4df79b2e--a308799a-ded1-47a2-8204-4381f048583f.lovable.app-1784801411306.png" },
     ],
     links: [
       {
