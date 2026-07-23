@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Search, ShoppingBag, User, Plus, Menu, X, Bell, LayoutDashboard } from "lucide-react";
+import { Search, ShoppingBag, User, Plus, Menu, X, Bell, LayoutDashboard, MessageCircle } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -83,6 +83,9 @@ export function SiteHeader() {
                   </span>
                 )}
               </Link>
+              <Link to="/messages" className="rounded-full p-2 text-muted-foreground transition hover:bg-secondary hover:text-foreground" aria-label="Messages">
+                <MessageCircle className="h-5 w-5" />
+              </Link>
               <Link to="/dashboard">
                 <Button variant="ghost" size="sm" className="rounded-full">
                   <LayoutDashboard className="mr-1 h-4 w-4" /> Dashboard
@@ -121,6 +124,7 @@ export function SiteHeader() {
             {signedIn ? (
               <>
                 <Link to="/dashboard" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-sm font-medium hover:bg-secondary">Dashboard</Link>
+                <Link to="/messages" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2 text-sm font-medium hover:bg-secondary">Messages</Link>
                 <Link to="/dashboard" search={{ tab: "notifications" }} onClick={() => setOpen(false)} className="flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium hover:bg-secondary">
                   <span>Notifications</span>
                   {unread > 0 && (

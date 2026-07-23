@@ -1,6 +1,7 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { toast } from "sonner";
 import {
   MapPin, Heart, Share2, MessageCircle, Phone, ShieldCheck, Flag,
   BadgeCheck, ChevronLeft,
@@ -35,6 +36,48 @@ export const Route = createFileRoute("/listing/$id")({
 function ListingPage() {
   const { id } = Route.useParams();
   const [activeImg, setActiveImg] = useState(0);
+  const navigate = useNavigate();
+  const [startingChat, setStartingChat] = useState(false);
+
+  const openConversation = async () => {
+    if (!data) return;
+    setStartingChat(true);
+    try {
+      const { data: session } = await supabase.auth.getSession();
+      const uid = session.session?.user.id;
+      if (!uid) {
+        navigate({ to: "/auth" });
+        return;
+      }
+      if (uid === data.seller_id) {
+        toast.error("You can't message yourself on your own listing.");
+        return;
+      }
+      const { data: existing } = await supabase
+        .from("conversations")
+        .select("id")
+        .eq("listing_id", data.id)
+        .eq("buyer_id", uid)
+        .eq("seller_id", data.seller_id)
+        .maybeSingle();
+      let convoId = existing?.id;
+      if (!convoId) {
+        const { data: created, error } = await supabase
+          .from("conversations")
+          .insert({ listing_id: data.id, buyer_id: uid, seller_id: data.seller_id })
+          .select("id")
+          .single();
+        if (error || !created) {
+          toast.error(error?.message || "Couldn't start chat");
+          return;
+        }
+        convoId = created.id;
+      }
+      navigate({ to: "/messages", search: { c: convoId } });
+    } finally {
+      setStartingChat(false);
+    }
+  };
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["listing", id],
@@ -168,8 +211,13 @@ function ListingPage() {
             </div>
 
             <div className="mt-5 grid gap-2">
-              <Button className="h-11 w-full rounded-xl bg-[image:var(--gradient-primary)] text-primary-foreground shadow-[var(--shadow-elegant)]">
-                <MessageCircle className="mr-2 h-4 w-4" /> Message seller
+              <Button
+                onClick={openConversation}
+                disabled={startingChat}
+                className="h-11 w-full rounded-xl bg-[image:var(--gradient-primary)] text-primary-foreground shadow-[var(--shadow-elegant)]"
+              >
+                <MessageCircle className="mr-2 h-4 w-4" />
+                {startingChat ? "Opening chat…" : "Message seller"}
               </Button>
               {seller?.whatsapp && (
                 <a href={`https://wa.me/${seller.whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent("Hi! I'm interested in your listing on Campus Marketplace: " + data.title)}`} target="_blank" rel="noreferrer">
