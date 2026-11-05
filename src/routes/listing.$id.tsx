@@ -239,7 +239,7 @@ function ListingPage() {
             <div className="mt-5 grid grid-cols-3 gap-2">
               <IconAction icon={Heart} label="Save" />
               <IconAction icon={Share2} label="Share" />
-              <IconAction icon={Flag} label="Report" />
+              <ReportButton />
             </div>
           </div>
 
@@ -261,6 +261,24 @@ function IconAction({ icon: Icon, label }: { icon: React.ComponentType<{ classNa
   return (
     <button className="flex flex-col items-center gap-1 rounded-xl border border-border py-2 text-xs font-medium text-muted-foreground transition hover:border-primary/40 hover:text-foreground">
       <Icon className="h-4 w-4" /> {label}
+    </button>
+  );
+}
+function ReportButton() {
+  const { id } = Route.useParams();
+  const navigate = useNavigate();
+  const report = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return navigate({ to: "/auth" });
+    const reason = window.prompt("Why are you reporting this listing? (e.g. scam, spam, prohibited item)");
+    if (!reason?.trim()) return;
+    const { error } = await supabase.from("reports").insert({ reporter_id: user.id, listing_id: id, reason: reason.trim().slice(0, 200) });
+    if (error) return toast.error(error.message);
+    toast.success("Thanks — our moderators will review it.");
+  };
+  return (
+    <button onClick={report} className="flex flex-col items-center gap-1 rounded-xl border border-border py-2 text-xs font-medium text-muted-foreground transition hover:border-primary/40 hover:text-foreground">
+      <Flag className="h-4 w-4" /> Report
     </button>
   );
 }

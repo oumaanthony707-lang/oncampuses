@@ -115,6 +115,7 @@ function Index() {
           </div>
         </div>
       </section>
+      <HomeBanners />
 
       {/* CATEGORIES */}
       <section id="categories" className="mx-auto w-full max-w-7xl scroll-mt-20 px-4 py-16 sm:px-6">
@@ -258,3 +259,27 @@ const TESTIMONIALS = [
   { name: "Brian K.", uni: "JKUAT", quote: "Found second-hand engineering notes at half the bookshop price. Life saver during exams." },
   { name: "Cynthia M.", uni: "Kenyatta University", quote: "The M-Pesa escrow made the deal feel super safe. Will use again next semester." },
 ];
+
+function HomeBanners() {
+  const q = useQuery({
+    queryKey: ["home-banners"],
+    queryFn: async () => (await supabase.from("banners").select("id,title,image_url,link").eq("is_active", true).order("sort_order")).data ?? [],
+  });
+  if (!q.data?.length) return null;
+  return (
+    <section className="mx-auto w-full max-w-7xl px-4 pt-8">
+      <div className="flex snap-x gap-4 overflow-x-auto">
+        {q.data.map((b) => {
+          const inner = (
+            <div className="relative h-36 w-[85vw] max-w-xl shrink-0 snap-start overflow-hidden rounded-3xl bg-[image:var(--gradient-primary)] shadow-[var(--shadow-elegant)] md:h-44">
+              {b.image_url && <img src={b.image_url} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />}
+              <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 to-transparent" />
+              <div className="absolute bottom-4 left-5 text-lg font-bold text-background">{b.title}</div>
+            </div>
+          );
+          return b.link ? <a key={b.id} href={b.link}>{inner}</a> : <div key={b.id}>{inner}</div>;
+        })}
+      </div>
+    </section>
+  );
+}
