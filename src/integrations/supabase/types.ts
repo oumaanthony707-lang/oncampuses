@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      banners: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string | null
+          is_active: boolean
+          link: string | null
+          sort_order: number
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          link?: string | null
+          sort_order?: number
+          title: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          link?: string | null
+          sort_order?: number
+          title?: string
+        }
+        Relationships: []
+      }
       categories: {
         Row: {
           created_at: string
@@ -126,6 +156,7 @@ export type Database = {
           location: string | null
           negotiable: boolean
           price: number
+          rejection_reason: string | null
           seller_id: string
           slug: string | null
           status: Database["public"]["Enums"]["listing_status"]
@@ -149,6 +180,7 @@ export type Database = {
           location?: string | null
           negotiable?: boolean
           price: number
+          rejection_reason?: string | null
           seller_id: string
           slug?: string | null
           status?: Database["public"]["Enums"]["listing_status"]
@@ -172,6 +204,7 @@ export type Database = {
           location?: string | null
           negotiable?: boolean
           price?: number
+          rejection_reason?: string | null
           seller_id?: string
           slug?: string | null
           status?: Database["public"]["Enums"]["listing_status"]
@@ -309,6 +342,24 @@ export type Database = {
           },
         ]
       }
+      platform_settings: {
+        Row: {
+          id: boolean
+          require_approval: boolean
+          updated_at: string
+        }
+        Insert: {
+          id?: boolean
+          require_approval?: boolean
+          updated_at?: string
+        }
+        Update: {
+          id?: boolean
+          require_approval?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -317,6 +368,7 @@ export type Database = {
           created_at: string
           full_name: string | null
           id: string
+          is_suspended: boolean
           is_verified: boolean
           phone: string | null
           rating: number
@@ -333,6 +385,7 @@ export type Database = {
           created_at?: string
           full_name?: string | null
           id: string
+          is_suspended?: boolean
           is_verified?: boolean
           phone?: string | null
           rating?: number
@@ -349,6 +402,7 @@ export type Database = {
           created_at?: string
           full_name?: string | null
           id?: string
+          is_suspended?: boolean
           is_verified?: boolean
           phone?: string | null
           rating?: number
@@ -364,6 +418,44 @@ export type Database = {
             columns: ["university_id"]
             isOneToOne: false
             referencedRelation: "universities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reports: {
+        Row: {
+          created_at: string
+          details: string | null
+          id: string
+          listing_id: string | null
+          reason: string
+          reporter_id: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          details?: string | null
+          id?: string
+          listing_id?: string | null
+          reason: string
+          reporter_id: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          details?: string | null
+          id?: string
+          listing_id?: string | null
+          reason?: string
+          reporter_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reports_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
             referencedColumns: ["id"]
           },
         ]
@@ -395,16 +487,52 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_staff: { Args: { _user_id: string }; Returns: boolean }
+      is_suspended: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
+      app_role: "admin" | "moderator" | "user"
       listing_condition: "new" | "like_new" | "good" | "fair" | "for_parts"
-      listing_status: "active" | "sold" | "pending" | "draft" | "removed"
+      listing_status:
+        | "active"
+        | "sold"
+        | "pending"
+        | "draft"
+        | "removed"
+        | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -532,8 +660,16 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      app_role: ["admin", "moderator", "user"],
       listing_condition: ["new", "like_new", "good", "fair", "for_parts"],
-      listing_status: ["active", "sold", "pending", "draft", "removed"],
+      listing_status: [
+        "active",
+        "sold",
+        "pending",
+        "draft",
+        "removed",
+        "rejected",
+      ],
     },
   },
 } as const
